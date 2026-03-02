@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const totalPriceEl = q('#totalPrice');
   const confirmBtn = q('#confirmBtn');
 
-  
+
   q('#year').textContent = new Date().getFullYear();
 
-  
+
   qa('.add-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const card = e.target.closest('.card');
@@ -20,27 +20,32 @@ document.addEventListener('DOMContentLoaded', () => {
       const name = card.dataset.name || card.querySelector('.product-name').textContent;
       const price = Number(card.dataset.price || 0);
       const img = card.querySelector('img')?.src || '';
-      addToCart({name, price, img});
-      
-      
+      addToCart({ name, price, img });
+
+
       e.target.textContent = 'Added';
-      setTimeout(()=> e.target.textContent = 'Add to Cart', 900);
+      setTimeout(() => e.target.textContent = 'Add to Cart', 900);
     });
   });
 
-    
-  function removeFromCart(index){
-    cart.splice(index,1);
+  function addToCart(item) {
+    cart.push(item);
     renderCart();
   }
 
-  function formatPrice(num){
-    return 'DZD ' + Number(num).toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
   }
 
-  function renderCart(){
+  function formatPrice(num) {
+    return 'DZD ' + Number(num).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  function renderCart() {
     cartList.innerHTML = '';
-    if (cart.length === 0){
+    if (cart.length === 0) {
       const li = document.createElement('li');
       li.className = 'empty';
       li.textContent = 'Your cart is empty.';
@@ -87,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cartList.appendChild(li);
     });
 
-    const total = cart.reduce((s,i) => s + Number(i.price || 0), 0);
+    const total = cart.reduce((s, i) => s + Number(i.price || 0), 0);
     totalPriceEl.textContent = formatPrice(total);
     confirmBtn.disabled = false;
   }
@@ -96,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
   confirmBtn.addEventListener('click', () => {
     const name = q('#custName').value.trim();
     const phone = q('#custPhone').value.trim();
-    if (!name || !phone){
+    if (!name || !phone) {
       alert('Please fill name and phone to confirm order.');
       return;
     }
@@ -130,10 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  function applyFilter(filter){
+  function applyFilter(filter) {
     qa('.card').forEach(card => {
       const cat = card.dataset.category || 'other';
-      if (filter === 'all' || filter === cat){
+      if (filter === 'all' || filter === cat) {
         card.style.display = '';
       } else {
         card.style.display = 'none';
@@ -143,13 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // small UX: toggle cart visibility on small screens
   const cartToggle = q('.cart-toggle');
-  if (cartToggle){
+  if (cartToggle) {
     cartToggle.addEventListener('click', () => {
       const sidebar = q('.sidebar');
       if (!sidebar) return;
-      sidebar.scrollIntoView({behavior:'smooth'});
+      sidebar.scrollIntoView({ behavior: 'smooth' });
       sidebar.style.boxShadow = '0 20px 60px rgba(110,45,208,0.18)';
-      setTimeout(()=> sidebar.style.boxShadow = '', 800);
+      setTimeout(() => sidebar.style.boxShadow = '', 800);
     });
   }
 
